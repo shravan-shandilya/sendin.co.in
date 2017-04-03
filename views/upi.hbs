@@ -1,0 +1,22 @@
+{{#if upi}}
+<script type="text/javascript" src="javascripts/qrcode.min.js"></script>
+<script type="text/javascript">
+  //document.getElementById('deposit_body').style.visibility = 'hidden';
+  var qrcode = new QRCode("upi_qr");
+  qrcode.makeCode("{{upi_vpa}}");
+</script>
+  <div class="ui center aligned basic segment">
+    <div class="ui header">
+      Scan
+    </div>
+    <div class="ui two column centered grid">
+      <div class="row" id="upi_qr"></div>
+    </div>
+    <div class="ui horizontal divider">
+      Or
+    </div>
+    <div class="ui header">
+      Paste {{vpa}} on Merchant site.
+    </div>
+  </div>
+{{/if}}

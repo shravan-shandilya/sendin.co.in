@@ -1,0 +1,69 @@
+{{#if deposit}}
+<script type="text/javascript" src="javascripts/qrcode.min.js"></script>
+<script type="text/javascript">
+  var xhttp = new XMLHttpRequest();
+  //document.getElementById('deposit_body').style.visibility = 'hidden';
+  function generate_bitcoin_address(){
+    var canvas = document.getElementById('bitcoin_qr').innerHTML = "";
+    var qrcode = new QRCode("bitcoin_qr");
+
+    xhttp.open("GET", "https://www.unocoin.com/trade?all", false);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    var one_btc = parseFloat(JSON.parse(xhttp.responseText).buy);
+    value_inr = parseFloat(document.getElementById('inr_value').value);
+    value_btc = value_inr / one_btc;
+    document.getElementById('bitcoin_label').innerHTML = value_btc.toPrecision(4);
+    qrcode.makeCode("bitcoin:{{address}}?amount="+value_btc.toPrecision(4));
+    document.getElementById('deposit_body').style.visibility = 'visible';
+  }
+  function transfered_bitcoin(){
+    document.getElementById('loader').style.visibility = 'visible';
+    amount = parseFloat(document.getElementById('bitcoin_label').innerHTML).toPrecision(4);
+    xhttp.open("GET","http://127.0.0.1:5000/watch/{{address}}_"+amount,false);
+    xhttp.send();
+    token = JSON.parse(xhttp.responseText).token;
+    console.log(token);
+    function checkPayment() {
+      console.log("checking");
+      xhttp.open("GET","http://127.0.0.1:5000/status/"+token,false);
+      xhttp.send();
+      status = JSON.parse(xhttp.responseText).status;
+      if(status == "true") {
+        console.log("We will proceed further"); /* this checks the flag every 100 milliseconds*/
+      } else {
+        /* do something*/
+        console.log("Not recieved payment");
+        window.setTimeout(checkPayment, 60000);
+      }
+    }
+    checkPayment();
+  }
+</script>
+<div class="ui two column centered grid">
+    <div class="ui divider"></div>
+    <div class="row">
+      <div class="ui right labeled action input">
+        <div class="ui label"><i class="rupee icon"></i></div>
+        <input type="text" id="inr_value" placeholder="Purchase Amount">
+        <button class="ui blue submit button" onClick="generate_bitcoin_address()">Get unique Bitcoin address</button>
+      </div>
+    </div>
+    <div class="ui center aligned basic segment" style="visibility:hidden" id="deposit_body">
+      <div class="ui header">
+        Scan
+      </div>
+      <div class="ui two column centered grid">
+        <div class="row" id="bitcoin_qr"></div>
+      </div>
+      <div class="ui horizontal divider">
+        Or
+      </div>
+        Send <div id="bitcoin_label" class="ui label"><i class="bitcoin icon"></i></div> to <div class="ui label">{{address}}</div>
+        <button class="ui green button" onclick="transfered_bitcoin()">I tranfered Bitcoin</button>
+    </div>
+    <div class="row" id="loader" style="visibility:hidden">
+      <div class="ui header row centered">Waiting</div><div class="ui active inline loader"></div>
+    </div>
+</div>
+{{/if}}

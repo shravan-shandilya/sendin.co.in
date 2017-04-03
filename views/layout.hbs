@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>{{title}}</title>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <link rel="stylesheet" type="text/css" href="dist/semantic.min.css">
+    <script
+      src="https://code.jquery.com/jquery-3.1.1.min.js"
+      integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8="
+      crossorigin="anonymous"></script>
+    <script src="dist/semantic.min.js"></script>
+  </head>
+  <body>
+    <div class="ui divider"></div>
+    <div class="ui steps grid">
+      <div class="{{deposit_step_status}}">
+        <i class="bitcoin icon"></i>
+        <div class="content">
+          <div class="title">Deposit</div>
+          <div class="description">Deposit bitcoin</div>
+        </div>
+      </div>
+      <div class="{{upi_step_status}}">
+        <i class="payment icon"></i>
+        <div class="content">
+          <div class="title">UPI</div>
+          <div class="description">Generate unique UPI address</div>
+        </div>
+      </div>
+      <div class="{{sitback_step_status}}">
+        <i class="rupee icon"></i>
+        <div class="content">
+          <div class="title">Sitback and Enjoy!</div>
+          <div class="description">sendin.co.in will clear the payment</div>
+        </div>
+      </div>
+    </div>
+    {{{body}}}
+  </body>
+</html>
