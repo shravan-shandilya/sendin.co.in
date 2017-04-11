@@ -2,21 +2,41 @@
 <script type="text/javascript" src="javascripts/qrcode.min.js"></script>
 <script type="text/javascript">
   //document.getElementById('deposit_body').style.visibility = 'hidden';
-  var qrcode = new QRCode("upi_qr");
-  qrcode.makeCode("{{upi_vpa}}");
+  window.onload = function(){
+    var qrcode = new QRCode("upi_qr");
+    qrcode.makeCode("8147077475@hdfc");
+  }
+
+  function pay(){
+    upi = document.getElementById('recipeint_upi').value;
+    var xhttp = new XMLHttpRequest();
+    xhttp.open("GET", "http://127.0.0.1:5000/upi/{{token}}_"+upi+"_{{amount_inr}}", false);
+    xhttp.setRequestHeader("Content-type", "application/json");
+    xhttp.send();
+    var status = JSON.parse(xhttp.responseText).status;
+    console.log(xhttp);
+    if(status == "true"){
+      var receipt = JSON.parse(xhttp.responseText).receipt;
+      window.location.href = "http://localhost:3000/receipt?id="+receipt;
+    }else{
+      //window.location.href = "0.0.0.0";
+    }
+  }
 </script>
   <div class="ui center aligned basic segment">
-    <div class="ui header">
-      Scan
-    </div>
-    <div class="ui two column centered grid">
-      <div class="row" id="upi_qr"></div>
+    <div class="ui right labeled action input">
+      <input type="text" id="recipeint_upi" placeholder="Recipient UPI VPA">
+      <button class="ui blue submit button" onClick="pay()">Send {{amount_inr}}</button>
     </div>
     <div class="ui horizontal divider">
       Or
     </div>
     <div class="ui header">
-      Paste {{vpa}} on Merchant site.
+      Send collect request to
+    </div>
+    <div class="ui two column centered grid">
+      <div class="row" id="upi_qr"></div>
     </div>
   </div>
+
 {{/if}}

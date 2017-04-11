@@ -4,7 +4,7 @@
   var xhttp = new XMLHttpRequest();
   //document.getElementById('deposit_body').style.visibility = 'hidden';
   function generate_bitcoin_address(){
-    var canvas = document.getElementById('bitcoin_qr').innerHTML = "";
+    document.getElementById('bitcoin_qr').innerHTML = "";
     var qrcode = new QRCode("bitcoin_qr");
 
     xhttp.open("GET", "https://www.unocoin.com/trade?all", false);
@@ -20,7 +20,7 @@
   function transfered_bitcoin(){
     document.getElementById('loader').style.visibility = 'visible';
     amount = parseFloat(document.getElementById('bitcoin_label').innerHTML).toPrecision(4);
-    xhttp.open("GET","http://127.0.0.1:5000/watch/{{address}}_"+amount,false);
+    xhttp.open("GET","http://127.0.0.1:5000/watch/{{address}}_"+amount+"_"+document.getElementById('inr_value').value,false);
     xhttp.send();
     token = JSON.parse(xhttp.responseText).token;
     console.log(token);
@@ -31,6 +31,7 @@
       status = JSON.parse(xhttp.responseText).status;
       if(status == "true") {
         console.log("We will proceed further"); /* this checks the flag every 100 milliseconds*/
+        window.location.href = "http://localhost:3000/upi?token="+token;
       } else {
         /* do something*/
         console.log("Not recieved payment");
