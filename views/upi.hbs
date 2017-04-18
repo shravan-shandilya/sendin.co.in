@@ -16,8 +16,8 @@
     var status = JSON.parse(xhttp.responseText).status;
     console.log(xhttp);
     if(status == "true"){
-      var receipt = JSON.parse(xhttp.responseText).receipt;
-      window.location.href = "http://localhost:3000/receipt?id="+receipt;
+      var receipt = JSON.parse(xhttp.responseText);
+      window.location.href = "http://localhost:3000/receipt?id="+receipt.receipt+"&amount_btc="+receipt.amount_btc+"&amount_inr="+receipt.amount_inr;
     }else{
       //window.location.href = "0.0.0.0";
     }

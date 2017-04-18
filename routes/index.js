@@ -40,12 +40,14 @@ router.get('/upi',function(req,res,next){
 });
 
 router.get('/receipt',function(req,res,next){
-  var receipt = req.query.receipt;
+  var receipt = req.query.id;
+  var amount_inr = req.query.amount_inr;
+  var amount_btc = req.query.amount_btc;
   client.get("http://127.0.0.1:5000/upi_status/"+receipt,function(data,responce){
     var status = JSON.parse(data.toString());
     if(status.status == "true"){
       res.render('complete',{ deposit_step_status:"completed step",upi_step_status:"completed step",
-      sitback_step_status:"active step",upi:"true",receipt:receipt,amount_inr:status.amount_inr,amount_btc:status.amount_btc});
+      sitback_step_status:"active step",upi:"true",receipt:receipt,amount_inr:amount_inr,amount_btc:amount_btc});
     }else{
       res.status(404).send('Not found');
     }
